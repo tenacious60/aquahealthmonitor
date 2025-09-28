@@ -9,6 +9,9 @@ import PatientReportForm from "@/components/reports/PatientReportForm";
 import WaterTestForm from "@/components/water/WaterTestForm";
 import AlertsScreen from "@/components/alerts/AlertsScreen";
 import ProfileScreen from "@/components/profile/ProfileScreen";
+import ReportsHistory from "@/components/reports/ReportsHistory";
+import TrainingScreen from "@/components/training/TrainingScreen";
+import FeedbackScreen from "@/components/feedback/FeedbackScreen";
 import BottomNav from "@/components/navigation/BottomNav";
 
 const queryClient = new QueryClient();
@@ -55,9 +58,13 @@ const App = () => {
       case "alerts":
         return <AlertsScreen />;
       case "profile":
-        return <ProfileScreen />;
+        return <ProfileScreen onNavigate={handleNavigation} />;
       case "reports":
-        return <AlertsScreen />; // Using AlertsScreen as placeholder for reports
+        return <ReportsHistory />;
+      case "training":
+        return <TrainingScreen onBack={() => setCurrentScreen("dashboard")} />;
+      case "feedback":
+        return <FeedbackScreen onBack={() => setCurrentScreen("profile")} />;
       default:
         return <Dashboard onNavigate={handleNavigation} />;
     }
