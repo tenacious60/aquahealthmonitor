@@ -51,6 +51,16 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
               <Smartphone className="w-4 h-4" />
               {showOTP ? "OTP Verification" : "Phone Number"}
             </div>
+            {/* Demo Credentials */}
+            <div className="mt-3 p-3 bg-muted/50 rounded-lg border-l-4 border-primary">
+              <h3 className="text-sm font-semibold text-foreground mb-1">Demo Credentials</h3>
+              <p className="text-xs text-muted-foreground">
+                {showOTP 
+                  ? "Use OTP: 123456" 
+                  : "Mobile: 9876543210"
+                }
+              </p>
+            </div>
           </CardHeader>
           <CardContent className="space-y-6">
             {!showOTP ? (
