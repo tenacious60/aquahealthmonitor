@@ -1,99 +1,110 @@
-import { useState } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import LoginScreen from "@/components/auth/LoginScreen";
-import Dashboard from "@/components/dashboard/Dashboard";
-import PatientReportForm from "@/components/reports/PatientReportForm";
-import WaterTestForm from "@/components/water/WaterTestForm";
-import AlertsScreen from "@/components/alerts/AlertsScreen";
-import ProfileScreen from "@/components/profile/ProfileScreen";
-import ReportsHistory from "@/components/reports/ReportsHistory";
-import TrainingScreen from "@/components/training/TrainingScreen";
-import FeedbackScreen from "@/components/feedback/FeedbackScreen";
-import BottomNav from "@/components/navigation/BottomNav";
+import React, { useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { AuthProvider, useAuth } from '@/hooks/useAuth';
 
+// Import screens
+import { AuthScreen } from '@/components/auth/AuthScreen';
+import Dashboard from '@/components/dashboard/Dashboard';
+import PatientReportForm from '@/components/reports/PatientReportForm';
+import ReportsHistory from '@/components/reports/ReportsHistory';
+import WaterTestForm from '@/components/water/WaterTestForm';
+import TrainingScreen from '@/components/training/TrainingScreen';
+import AlertsScreen from '@/components/alerts/AlertsScreen';
+import FeedbackScreen from '@/components/feedback/FeedbackScreen';
+import ProfileScreen from '@/components/profile/ProfileScreen';
+import BottomNav from '@/components/navigation/BottomNav';
+import { WelcomePopup } from '@/components/profile/WelcomePopup';
+
+// Create a client for React Query
 const queryClient = new QueryClient();
 
-const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState("dashboard");
-  const [activeTab, setActiveTab] = useState("home");
+function AppContent() {
+  // State management
+  const [currentScreen, setCurrentScreen] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const { user, loading } = useAuth();
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
-
+  // Event handlers
   const handleNavigation = (screen: string) => {
     setCurrentScreen(screen);
   };
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    switch (tab) {
-      case "home":
-        setCurrentScreen("dashboard");
-        break;
-      case "reports":
-        setCurrentScreen("reports");
-        break;
-      case "alerts":
-        setCurrentScreen("alerts");
-        break;
-      case "profile":
-        setCurrentScreen("profile");
-        break;
+    if (tab === 'home') {
+      setCurrentScreen('dashboard');
+    } else if (tab === 'reports') {
+      setCurrentScreen('reports');
+    } else if (tab === 'alerts') {
+      setCurrentScreen('alerts');
+    } else if (tab === 'profile') {
+      setCurrentScreen('profile');
     }
   };
 
+  // Screen rendering logic
   const renderScreen = () => {
     switch (currentScreen) {
-      case "dashboard":
+      case 'dashboard':
         return <Dashboard onNavigate={handleNavigation} />;
-      case "report-patient":
-        return <PatientReportForm onBack={() => setCurrentScreen("dashboard")} />;
-      case "water-test":
-        return <WaterTestForm onBack={() => setCurrentScreen("dashboard")} />;
-      case "alerts":
+      case 'report-patient':
+        return <PatientReportForm onBack={() => setCurrentScreen('dashboard')} />;
+      case 'water-test':
+        return <WaterTestForm onBack={() => setCurrentScreen('dashboard')} />;
+      case 'alerts':
         return <AlertsScreen />;
-      case "profile":
+      case 'profile':
         return <ProfileScreen onNavigate={handleNavigation} />;
-      case "reports":
+      case 'reports':
         return <ReportsHistory />;
-      case "training":
-        return <TrainingScreen onBack={() => setCurrentScreen("dashboard")} />;
-      case "feedback":
-        return <FeedbackScreen onBack={() => setCurrentScreen("profile")} />;
+      case 'training':
+        return <TrainingScreen onBack={() => setCurrentScreen('dashboard')} />;
+      case 'feedback':
+        return <FeedbackScreen onBack={() => setCurrentScreen('profile')} />;
       default:
         return <Dashboard onNavigate={handleNavigation} />;
     }
   };
 
-  if (!isAuthenticated) {
+  if (loading) {
     return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <LoginScreen onLogin={handleLogin} />
-        </TooltipProvider>
-      </QueryClientProvider>
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
     );
   }
 
+  // Conditional rendering based on authentication and current screen
+  if (!user) {
+    return <AuthScreen />;
+  }
+
+  return (
+    <div className="App">
+      <div className="flex flex-col h-screen">
+        <div className="flex-1 overflow-hidden">
+          {renderScreen()}
+        </div>
+        <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
+      </div>
+      <WelcomePopup />
+    </div>
+  );
+}
+
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <div className="min-h-screen bg-background">
-          {renderScreen()}
-          <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
-        </div>
+        <AuthProvider>
+          <AppContent />
+          <Toaster />
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
-};
+}
 
 export default App;

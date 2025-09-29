@@ -14,7 +14,114 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          title: string
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          title: string
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          title?: string
+          type?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          language: string | null
+          last_login_at: string | null
+          pincode: string | null
+          profile_image_url: string | null
+          theme: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          language?: string | null
+          last_login_at?: string | null
+          pincode?: string | null
+          profile_image_url?: string | null
+          theme?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          language?: string | null
+          last_login_at?: string | null
+          pincode?: string | null
+          profile_image_url?: string | null
+          theme?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          auto_sync: boolean | null
+          created_at: string
+          emergency_contact: string | null
+          id: string
+          notifications_enabled: boolean | null
+          privacy_camera: boolean | null
+          privacy_location: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_sync?: boolean | null
+          created_at?: string
+          emergency_contact?: string | null
+          id?: string
+          notifications_enabled?: boolean | null
+          privacy_camera?: boolean | null
+          privacy_location?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_sync?: boolean | null
+          created_at?: string
+          emergency_contact?: string | null
+          id?: string
+          notifications_enabled?: boolean | null
+          privacy_camera?: boolean | null
+          privacy_location?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
