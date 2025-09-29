@@ -81,15 +81,15 @@ const AlertsScreen = ({ onBack }: AlertsScreenProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <div className="bg-card border-b sticky top-0 z-10">
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               {onBack && (
-                <Button variant="ghost" size="sm" onClick={onBack}>
-                  <ArrowLeft className="w-4 h-4" />
+                <Button variant="ghost" size="icon" onClick={onBack}>
+                  <ArrowLeft className="w-5 h-5" strokeWidth={2.5} />
                 </Button>
               )}
               <h1 className="text-lg font-semibold">Health Alerts</h1>
@@ -102,16 +102,17 @@ const AlertsScreen = ({ onBack }: AlertsScreenProps) => {
           {/* Offline Notice */}
           <Card className="border-warning bg-warning/5 mb-0">
             <CardContent className="p-3">
+              
               <div className="flex items-center gap-2 text-sm">
                 <div className="w-2 h-2 bg-warning rounded-full" />
-                <span className="text-warning-foreground">Working offline - Alerts cached locally</span>
+                <span className="text-foreground font-semibold ml-3">Working offline - Alerts cached locally</span>
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
 
-      <div className="p-4 space-y-4 pb-20">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-4">
           <Card className="text-center">

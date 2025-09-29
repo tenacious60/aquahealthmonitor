@@ -77,6 +77,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onNavigate }) => 
         pincode: profile.pincode || ''
       });
     }
+    // Auto-start edit if prompted from welcome popup
+    const shouldStartEdit = sessionStorage.getItem('startProfileEdit');
+    if (shouldStartEdit && !isEditing) {
+      setIsEditing(true);
+      sessionStorage.removeItem('startProfileEdit');
+    }
   }, [profile]);
 
   const handleSignOut = async () => {
@@ -205,25 +211,25 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onNavigate }) => 
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-card">
-        <div className="flex items-center gap-3">
-          {onBack && (
-            <Button variant="ghost" size="icon" onClick={onBack}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          )}
-          <h1 className="text-xl font-semibold">Profile</h1>
-        </div>
-        <Button variant="outline" size="sm" onClick={handleSignOut}>
-          <LogOut className="h-4 w-4 mr-2" />
-          Sign Out
-        </Button>
+      <div className="flex flex-col h-screen bg-background">
+    {/* Header */}
+    <div className="flex items-center justify-between p-4 border-b bg-card shrink-0">
+      <div className="flex items-center gap-3">
+        {onBack && (
+          <Button variant="ghost" size="icon" onClick={onBack}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+        )}
+        <h1 className="text-xl font-semibold">Profile</h1>
       </div>
+      <Button variant="outline" size="sm" onClick={handleSignOut}>
+        <LogOut className="h-4 w-4 mr-2" />
+        Sign Out
+      </Button>
+    </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20">
         {/* User Profile Card */}
         <Card>
           <CardHeader className="pb-3">
@@ -296,11 +302,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onNavigate }) => 
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Verified
                       </Badge>
-                      {loginInfo && (
-                        <Badge variant="secondary" className="text-xs">
-                          Last login: {loginInfo.timeAgo}
-                        </Badge>
-                      )}
                     </div>
                   </>
                 )}
@@ -318,8 +319,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onNavigate }) => 
                   </>
                 ) : (
                   <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit
+                    <Edit className="h-4 w-4" />
+                    <span className="ml-2 hidden sm:inline">Edit</span>
                   </Button>
                 )}
               </div>
@@ -384,12 +385,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onNavigate }) => 
                 <span className="text-sm text-muted-foreground">Pincode</span>
                 <span className="text-sm font-medium">{profile.pincode || 'Not set'}</span>
               </div>
-              {loginInfo && (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Login Time Today</span>
-                  <span className="text-sm font-medium">{loginInfo.time}</span>
-                </div>
-              )}
+              
             </CardContent>
           </Card>
         )}
@@ -511,95 +507,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onNavigate }) => 
                 </div>
               </TabsContent>
             </Tabs>
-          </CardContent>
-        </Card>
-
-        {/* Alerts Section */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Bell className="h-4 w-4" />
-                Alerts {unreadCount > 0 && <Badge variant="secondary">{unreadCount}</Badge>}
-              </CardTitle>
-              <Select value={alertFilter} onValueChange={(value: any) => setAlertFilter(value)}>
-                <SelectTrigger className="w-[100px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="today">Today</SelectItem>
-                  <SelectItem value="yesterday">Yesterday</SelectItem>
-                  <SelectItem value="unread">Unread</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-2 max-h-60 overflow-y-auto">
-            {filteredAlerts.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-4">No alerts found</p>
-            ) : (
-              filteredAlerts.map((alert) => (
-                <Dialog key={alert.id}>
-                  <DialogTrigger asChild>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50 cursor-pointer hover:bg-muted transition-colors">
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className={`h-2 w-2 rounded-full ${alert.is_read ? 'bg-muted-foreground' : 'bg-primary'}`}></div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{alert.title}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {formatDistanceToNow(new Date(alert.created_at), { addSuffix: true })}
-                          </p>
-                        </div>
-                      </div>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                    </div>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>{alert.title}</DialogTitle>
-                      <DialogDescription>
-                        {new Date(alert.created_at).toLocaleString()}
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <p>{alert.message}</p>
-                      <div className="flex gap-2">
-                        {!alert.is_read && (
-                          <Button onClick={() => markAsRead(alert.id)} size="sm">
-                            Mark as Read
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* App Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <Info className="h-4 w-4" />
-              App Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Version</span>
-              <span className="text-sm font-medium">2.1.0</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Build</span>
-              <span className="text-sm font-medium">240929</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Last Update</span>
-              <span className="text-sm font-medium">{new Date().toLocaleDateString()}</span>
-            </div>
           </CardContent>
         </Card>
       </div>

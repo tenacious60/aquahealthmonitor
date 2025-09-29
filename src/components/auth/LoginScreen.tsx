@@ -27,8 +27,9 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="h-screen flex flex-col bg-background">
+      <div className="flex-1 overflow-y-auto p-4">
+      <div className="w-full max-w-md mx-auto">
         {/* App Icon and Title */}
         <div className="text-center mb-8">
           <div className="mx-auto w-20 h-20 bg-primary rounded-full flex items-center justify-center mb-4 shadow-lg">
@@ -136,6 +137,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
             <Badge variant="outline">తెలుగు</Badge>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

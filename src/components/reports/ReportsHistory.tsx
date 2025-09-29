@@ -152,7 +152,7 @@ const ReportsHistory = ({ onBack }: ReportsHistoryProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <div className="bg-card border-b sticky top-0 z-10">
         <div className="p-4">
@@ -182,7 +182,7 @@ const ReportsHistory = ({ onBack }: ReportsHistoryProps) => {
         </div>
       </div>
 
-      <div className="p-4 space-y-4 pb-20">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-4">
           <Card className="text-center">

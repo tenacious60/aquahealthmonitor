@@ -58,7 +58,7 @@ const PatientReportForm = ({ onBack }: PatientReportFormProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <div className="bg-card border-b sticky top-0 z-10">
         <div className="p-4">
@@ -71,13 +71,13 @@ const PatientReportForm = ({ onBack }: PatientReportFormProps) => {
         </div>
       </div>
 
-      <div className="p-4 space-y-6 pb-20">
+      <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
         {/* Offline Notice */}
         <Card className="border-warning bg-warning/5">
           <CardContent className="p-3">
             <div className="flex items-center gap-2 text-sm">
               <div className="w-2 h-2 bg-warning rounded-full" />
-              <span className="text-warning-foreground">Working offline - Data will sync automatically</span>
+              <span className="text-foreground font-semibold ml-3">Working offline - Data will sync automatically</span>
             </div>
           </CardContent>
         </Card>

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
+import { useProfile } from '@/hooks/useProfile';
 
 // Import screens
 import { AuthScreen } from '@/components/auth/AuthScreen';
@@ -25,6 +26,7 @@ function AppContent() {
   const [currentScreen, setCurrentScreen] = useState('dashboard');
   const [activeTab, setActiveTab] = useState('dashboard');
   const { user, loading } = useAuth();
+  const { profile } = useProfile();
 
   // Event handlers
   const handleNavigation = (screen: string) => {
@@ -43,6 +45,27 @@ function AppContent() {
       setCurrentScreen('profile');
     }
   };
+
+  // Apply theme based on profile selection
+  useEffect(() => {
+    const root = document.documentElement;
+    const applyTheme = (mode: string | undefined | null) => {
+      if (mode === 'dark') {
+        root.classList.add('dark');
+      } else if (mode === 'light') {
+        root.classList.remove('dark');
+      } else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) root.classList.add('dark');
+        else root.classList.remove('dark');
+      }
+    };
+    applyTheme(profile?.theme);
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    const listener = () => applyTheme(profile?.theme);
+    mql.addEventListener?.('change', listener);
+    return () => mql.removeEventListener?.('change', listener);
+  }, [profile?.theme]);
 
   // Screen rendering logic
   const renderScreen = () => {
@@ -89,7 +112,13 @@ function AppContent() {
         </div>
         <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
       </div>
-      <WelcomePopup />
+      <WelcomePopup 
+        onCompleteProfile={() => {
+          sessionStorage.setItem('startProfileEdit', 'true');
+          setCurrentScreen('profile');
+          setActiveTab('profile');
+        }}
+      />
     </div>
   );
 }

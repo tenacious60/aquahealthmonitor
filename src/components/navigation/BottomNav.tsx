@@ -14,7 +14,7 @@ const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border">
+    <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border mt-4">
       <div className="grid grid-cols-4 h-16">
         {tabs.map((tab) => {
           const Icon = tab.icon;

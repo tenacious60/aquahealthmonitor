@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useProfile } from "@/hooks/useProfile";
 import { 
   Phone, 
   FileText, 
@@ -18,12 +20,7 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ onNavigate }: DashboardProps) => {
-  const userProfile = {
-    name: "John",
-    role: "ASHA Worker",
-    location: "Block PHC, Ganjam",
-    avatar: "/api/placeholder/40/40"
-  };
+  const { profile: userProfile } = useProfile();
 
   const todayStats = [
     { label: "Cases Reported", value: "3", color: "text-primary" },
@@ -64,20 +61,23 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <div className="bg-card border-b sticky top-0 z-10">
         <div className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-primary-foreground" />
-              </div>
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={userProfile?.profile_image_url || ""} />
+                <AvatarFallback>
+                  <User className="w-5 h-5" />
+                </AvatarFallback>
+              </Avatar>
               <div>
-                <h1 className="text-lg font-semibold">Good Morning, {userProfile.name}</h1>
+                <h1 className="text-lg font-semibold">Good Morning, {userProfile?.full_name || 'User'}</h1>
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <MapPin className="w-3 h-3" />
-                  {userProfile.role} - {userProfile.location}
+                  {"ASHA Worker"} - {userProfile?.address || ""}
                 </div>
               </div>
             </div>
@@ -85,14 +85,13 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
         </div>
       </div>
 
-      <div className="p-4 space-y-6">
+      <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
         {/* Emergency Call */}
         <Card className="border-emergency bg-emergency/5">
           <CardContent className="p-4">
             <Button className="w-full h-12 bg-emergency hover:bg-emergency/90">
               <Phone className="w-5 h-5 mr-2" />
               Emergency Call
-              <span className="ml-auto text-sm opacity-90">PHC Helpline: +91-1234567890</span>
             </Button>
           </CardContent>
         </Card>

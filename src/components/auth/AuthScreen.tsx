@@ -62,8 +62,9 @@ export const AuthScreen = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
+      <div className="max-w-md mx-auto pt-8">
+      <Card className="w-full">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
             <Zap className="h-8 w-8 text-primary" />
@@ -184,6 +185,7 @@ export const AuthScreen = () => {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 };

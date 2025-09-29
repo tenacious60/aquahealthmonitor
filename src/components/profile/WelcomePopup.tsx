@@ -7,7 +7,11 @@ import { useProfile } from '@/hooks/useProfile';
 import { formatDistanceToNow } from 'date-fns';
 import { Zap, Clock, User } from 'lucide-react';
 
-export const WelcomePopup = () => {
+interface WelcomePopupProps {
+  onCompleteProfile?: () => void;
+}
+
+export const WelcomePopup = ({ onCompleteProfile }: WelcomePopupProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const { profile } = useProfile();
@@ -77,21 +81,7 @@ export const WelcomePopup = () => {
             </div>
           </div>
           
-          {loginInfo && (
-            <div className="rounded-lg bg-muted/50 p-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Login Information</span>
-              </div>
-              <div className="space-y-1 text-sm text-muted-foreground">
-                <p>Today at {loginInfo.time}</p>
-                <p>Last login: {loginInfo.timeAgo}</p>
-                {loginInfo.hoursAgo > 0 && (
-                  <p className="text-xs">Session active for {loginInfo.hoursAgo} hours</p>
-                )}
-              </div>
-            </div>
-          )}
+          
           
           <div className="flex gap-2">
             <Button 
@@ -103,7 +93,10 @@ export const WelcomePopup = () => {
             </Button>
             <Button 
               className="flex-1"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                onCompleteProfile && onCompleteProfile();
+              }}
             >
               Complete Profile
             </Button>

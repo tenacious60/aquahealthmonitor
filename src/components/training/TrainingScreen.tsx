@@ -180,7 +180,7 @@ const TrainingScreen = ({ onBack }: TrainingScreenProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <div className="bg-card border-b sticky top-0 z-10">
         <div className="p-4">
@@ -210,7 +210,7 @@ const TrainingScreen = ({ onBack }: TrainingScreenProps) => {
         </div>
       </div>
 
-      <div className="p-4 space-y-6 pb-20">
+      <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
         {/* Language Selection */}
         <Card>
           <CardHeader className="pb-3">
