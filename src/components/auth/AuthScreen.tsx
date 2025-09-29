@@ -76,10 +76,10 @@ export const AuthScreen = () => {
         
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            {/* <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
+            </TabsList> */}
             
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
@@ -113,12 +113,12 @@ export const AuthScreen = () => {
                     Demo Credentials
                   </h3>
                   <div className="space-y-1 text-sm text-muted-foreground">
-                    <p>Email: demo@aquahealth.com</p>
-                    <p>Password: demo123</p>
-                    <div className="flex gap-2 mt-2">
+                    <p>Email: john@healthmonitor.com</p>
+                    <p>Password: 123456789</p>
+                    {/* <div className="flex gap-2 mt-2">
                       <Badge variant="secondary" className="text-xs">Demo Mobile: 9876543210</Badge>
                       <Badge variant="secondary" className="text-xs">Demo OTP: 123456</Badge>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 
@@ -167,19 +167,19 @@ export const AuthScreen = () => {
                   />
                 </div>
                 
-                <Button type="submit" className="w-full" disabled={loading}>
+                {/* <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Sign Up
-                </Button>
+                </Button> */}
               </form>
             </TabsContent>
           </Tabs>
           
           <div className="mt-6 space-y-2">
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <Badge variant="outline">English</Badge>
+              {/* <Badge variant="outline">English</Badge>
               <Badge variant="outline">हिंदी</Badge>
-              <Badge variant="outline">中文</Badge>
+              <Badge variant="outline">中文</Badge> */}
             </div>
           </div>
         </CardContent>

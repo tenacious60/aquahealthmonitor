@@ -19,7 +19,7 @@ interface DashboardProps {
 
 const Dashboard = ({ onNavigate }: DashboardProps) => {
   const userProfile = {
-    name: "Priya",
+    name: "John",
     role: "ASHA Worker",
     location: "Block PHC, Ganjam",
     avatar: "/api/placeholder/40/40"

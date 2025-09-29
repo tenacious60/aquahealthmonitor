@@ -13,15 +13,20 @@ export const WelcomePopup = () => {
   const { profile } = useProfile();
 
   useEffect(() => {
-    if (user && profile) {
-      // Show welcome popup when user logs in
+  if (user && profile) {
+    const hasShownPopup = sessionStorage.getItem('welcomePopupShown');
+
+    if (!hasShownPopup) {
       const timer = setTimeout(() => {
         setIsOpen(true);
+        sessionStorage.setItem('welcomePopupShown', 'true'); // mark as shown
       }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [user, profile]);
+  }
+}, [user, profile]);
+
 
   const getLoginTimeInfo = () => {
     if (!profile?.last_login_at) return null;
